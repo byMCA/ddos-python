@@ -49,10 +49,10 @@ def main():
 """)
 
 
-    target_ip = input("Hedef IP adresini girin: ")
-    target_port = int(input("Hedef port numarasını girin: "))
-    num_threads = int(input("Kullanılacak thread sayısını girin: "))
-    num_requests = int(input("Her thread için istek sayısını girin: "))
+    target_ip = input("Enter the destination IP address: ")
+    target_port = int(input("Enter the destination port number: "))
+    num_threads = int(input("Enter the number of threads to use: "))
+    num_requests = int(input("Enter the number of requests for each thread: "))
 
     start_attack(target_ip, target_port, num_threads, num_requests)
 
