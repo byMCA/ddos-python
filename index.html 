@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="format-detection" content="telephone=no">
+<title>Mars – Uçuş ve Kampanya Arama</title>
+<style>
+:root{--bg:#f2f2f7;--cd:#fff;--tx:#000;--mu:#8a8a8e;--sp:#c6c6c866;--ac:#d6381f;--ok:#248a3d;--okb:#e3f5e8;--wb:#fff4e0;--wt:#8a5200;--bar:#f2f2f7d9;--sg:#7676801f;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#000;--cd:#1c1c1e;--tx:#fff;--mu:#98989f;--sp:#54545899;--ac:#ff6a4d;--ok:#32d74b;--okb:#12301a;--wb:#33260f;--wt:#ffc266;--bar:#000000b3;--sg:#7676803d;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#000;--cd:#1c1c1e;--tx:#fff;--mu:#98989f;--sp:#54545899;--ac:#ff6a4d;--ok:#32d74b;--okb:#12301a;--wb:#33260f;--wt:#ffc266;--bar:#000000b3;--sg:#7676803d;color-scheme:dark}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+input{-webkit-user-select:text;user-select:text}
+html,body{margin:0;width:100%;max-width:100%;overflow-x:hidden;overscroll-behavior-x:none;touch-action:manipulation;background:var(--bg);color:var(--tx);font:400 17px/1.35 -apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Roboto,system-ui,sans-serif;-webkit-text-size-adjust:100%}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--bar);-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);z-index:30}
+button,input,select{font:inherit;color:inherit;border:0;background:none;margin:0;padding:0;touch-action:manipulation}
+button{cursor:pointer;text-align:left}
+:focus-visible{outline:2px solid var(--ac);outline-offset:2px}
+svg.i{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:0 0 auto;display:block}
+.app{max-width:560px;margin:0 auto;min-width:0;padding-bottom:96px}
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:25;height:44px;display:flex;align-items:center;justify-content:center;background:var(--bar);-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);border-bottom:.5px solid transparent}
+.bar.sc{border-color:var(--sp)}
+.bt{font-weight:600;opacity:0;transition:opacity .2s}.bar.sc .bt{opacity:1}
+.bk{position:absolute;left:6px;top:0;height:44px;color:var(--ac);padding:0 10px 0 4px;display:none;align-items:center;gap:2px}.bk.on{display:flex}
+.pg{padding:0 16px}
+h1{font-size:34px;line-height:1.1;font-weight:700;margin:4px 0 14px;letter-spacing:.3px;overflow-wrap:anywhere}
+.sub{color:var(--mu);margin:-8px 0 12px;font-size:15px}
+.view,.scr{display:none}.view.on,.scr.on{display:block}
+.grp{background:var(--cd);border-radius:12px;overflow:hidden;margin:0 0 16px}
+.row{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;min-height:52px;padding:8px 16px;position:relative;min-width:0}
+.grp>.row+.row::before{content:"";position:absolute;left:16px;right:0;top:0;height:.5px;background:var(--sp)}
+.pair{position:relative}.pair .row+.row::before{content:"";position:absolute;left:16px;right:0;top:0;height:.5px;background:var(--sp)}
+.k{flex:0 0 auto}
+.v{text-align:right;min-width:0;flex:1;display:flex;flex-direction:column;align-items:flex-end;color:var(--ac);padding-right:36px}
+.v b{font-weight:500;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.v small{color:var(--mu);font-size:13px;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.row input[type=date]{text-align:right;color:var(--ac);min-width:0;min-height:36px;font-size:17px;-webkit-appearance:none;appearance:none}
+.swp{position:absolute;right:12px;top:50%;transform:translateY(-50%);width:32px;height:32px;border-radius:50%;background:var(--cd);box-shadow:0 0 0 .5px var(--sp),0 1px 4px #0002;z-index:2;display:flex;align-items:center;justify-content:center;color:var(--ac)}
+.step{display:flex;align-items:center;gap:14px}.step button{width:32px;height:32px;border-radius:50%;background:var(--sg);display:flex;align-items:center;justify-content:center}.step b{min-width:16px;text-align:center}
+.seg{display:flex;background:var(--sg);border-radius:9px;padding:2px;margin:0 0 14px}.seg button{flex:1;text-align:center;padding:6px 4px;border-radius:7px;font-size:14px;font-weight:500;min-width:0}.seg button.on{background:var(--cd);box-shadow:0 1px 3px #0002}
+.go{display:block;width:100%;height:52px;border-radius:14px;background:var(--ac);color:#fff;font-weight:600;text-align:center}
+:root[data-theme="dark"] .go{color:#000}@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .go{color:#000}}
+.go:active{opacity:.8}
+.note{color:var(--mu);font-size:13px;margin:14px 4px}
+.warn{background:var(--wb);color:var(--wt);border-radius:12px;padding:10px 14px;font-size:14px;margin:0 0 14px}
+.days{display:flex;align-items:stretch;gap:4px;margin:0 0 6px}.days>button{flex:0 0 26px;color:var(--ac);display:flex;align-items:center;justify-content:center}
+.dg{flex:1;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:4px}
+.day{background:var(--cd);border-radius:10px;padding:7px 2px;text-align:center;min-width:0;overflow:hidden}.day small{display:block;color:var(--mu);font-size:11px;line-height:1.25}.day b{display:block;font-size:12px;font-weight:600;white-space:nowrap}
+.day.low{background:var(--okb)}.day.low b{color:var(--ok)}.day.sel{box-shadow:inset 0 0 0 2px var(--ac)}.day:disabled{opacity:.35}
+.cap{color:var(--mu);font-size:12px;margin:0 4px 14px}
+.pills{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 12px}.pill{height:34px;padding:0 14px;border-radius:17px;background:var(--cd);font-size:15px;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.pill.on{background:var(--ac);color:#fff}
+.offer{display:block;width:100%;background:var(--cd);border-radius:12px;padding:12px 16px;margin:0 0 10px}
+.o1{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:15px;min-width:0}.o1 b{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.o2{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:10px;margin:8px 0 4px;font-size:20px;font-weight:600}
+.o2 .ln{font-size:12px;font-weight:400;color:var(--mu);text-align:center;border-bottom:1.5px dotted var(--sp);padding-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.o2.r{font-size:15px;font-weight:500;color:var(--mu);margin:2px 0 4px}
+.o3{display:flex;justify-content:space-between;align-items:flex-end;gap:8px;margin-top:6px}
+.m{color:var(--mu);font-size:13px;display:flex;flex-direction:column;gap:4px;align-items:flex-start;min-width:0}
+.p{font-size:22px;font-weight:700;text-align:right;display:flex;flex-direction:column;align-items:flex-end;flex:0 0 auto}.p small{font-size:12px;font-weight:400;color:var(--mu)}
+.chip{background:var(--okb);color:var(--ok);border-radius:8px;padding:2px 8px;font-size:12px}
+.tag{font-size:12px;color:var(--mu);background:var(--sg);border-radius:8px;padding:1px 8px;white-space:nowrap}.tag.sp{color:var(--ac)}
+.empty{text-align:center;color:var(--mu);padding:28px 16px}
+.cp{background:var(--cd);border-radius:12px;padding:12px 16px;margin:0 0 10px}.cp .t{display:flex;justify-content:space-between;gap:8px;align-items:center;margin-bottom:4px}
+.lnk{color:var(--ac);font-weight:500;margin-top:8px;display:inline-block}.del{color:#ff3b30;margin-top:6px;display:inline-block}
+.tabs{position:fixed;left:0;right:0;bottom:0;z-index:25;display:flex;justify-content:center;background:var(--bar);-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);border-top:.5px solid var(--sp);padding-bottom:env(safe-area-inset-bottom,0px)}
+.tabs>div{display:flex;width:100%;max-width:560px}
+.tabs button{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:7px 0 6px;font-size:10.5px;color:var(--mu);text-align:center}.tabs button[aria-selected="true"]{color:var(--ac)}
+.tabs svg.i{width:26px;height:26px;stroke-width:1.8}
+.ov{position:fixed;inset:0;background:#0000006b;display:none;z-index:50;overscroll-behavior:contain}.ov.on{display:flex;align-items:flex-end;justify-content:center}
+.sheet{width:100%;max-width:560px;height:88vh;height:88dvh;background:var(--bg);border-radius:14px 14px 0 0;display:flex;flex-direction:column;animation:up .26s ease-out;overflow:hidden}
+.sheet.sm{height:auto;max-height:88dvh}
+@keyframes up{from{transform:translateY(40%);opacity:.5}}
+.sh{display:flex;align-items:center;justify-content:space-between;padding:14px 16px 8px;font-weight:600}.sh button{color:var(--ac);font-weight:500}
+.sb{overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;padding:0 16px calc(16px + env(safe-area-inset-bottom,0px));flex:1;min-height:0}
+.sr{display:block;width:100%;height:38px;border-radius:10px;background:var(--sg);padding:0 12px;margin:0 0 12px;font-size:17px;-webkit-appearance:none;appearance:none}
+.gh{color:var(--mu);font-size:13px;margin:14px 16px 6px}
+.pk .row{background:var(--cd);min-height:48px}.pk .row b{display:block;font-weight:500;overflow:hidden;text-overflow:ellipsis}.pk .row small{display:block;color:var(--mu);font-size:13px}.pk .row>span{min-width:0}
+.pk .grp{margin-bottom:6px}.pk .ind{padding-left:32px}
+.ds{display:flex;justify-content:space-between;gap:12px;padding:10px 16px;position:relative}.ds+.ds::before{content:"";position:absolute;left:16px;right:0;top:0;height:.5px;background:var(--sp)}.ds>span:first-child{color:var(--mu);flex:0 0 auto}.ds>span:last-child{text-align:right;min-width:0;overflow-wrap:anywhere}
+.toast{position:fixed;left:50%;bottom:calc(74px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:#333c;color:#fff;-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);padding:10px 16px;border-radius:14px;max-width:90vw;z-index:60;display:none;font-size:15px;text-align:center}
+@media (prefers-reduced-motion:reduce){.sheet{animation:none}*{transition:none!important}}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<symbol id="ch" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></symbol>
+<symbol id="cr" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></symbol>
+<symbol id="sw" viewBox="0 0 24 24"><path d="M8 4v16M8 4L4 8M8 4l4 4M16 20V4M16 20l-4-4M16 20l4-4"/></symbol>
+<symbol id="mi" viewBox="0 0 24 24"><path d="M5 12h14"/></symbol>
+<symbol id="pl" viewBox="0 0 24 24"><path d="M5 12h14M12 5v14"/></symbol>
+</defs></svg>
+<div class="app">
+<div class="bar" id="bar"><button class="bk" id="back"><svg class="i"><use href="#ch"/></svg>Ara</button><div class="bt" id="bt">Mars</div></div>
+
+<section id="v-ara" class="view on pg">
+<div id="s-form" class="scr on">
+<h1>Mars</h1>
+<p class="sub">Dünyanın her yerine uçuşları karşılaştırın.</p>
+<div class="seg" id="trip"><button class="on" data-t="rt">Gidiş-dönüş</button><button data-t="ow">Tek yön</button></div>
+<div class="grp">
+<div class="pair">
+<button class="row" id="rf"><span class="k">Nereden</span><span class="v" id="vf"></span></button>
+<button class="row" id="rto"><span class="k">Nereye</span><span class="v" id="vt"></span></button>
+<button class="swp" id="swap" aria-label="Yerleri değiştir"><svg class="i"><use href="#sw"/></svg></button>
+</div>
+<label class="row"><span class="k">Gidiş</span><input type="date" id="dep"></label>
+<label class="row" id="retrow"><span class="k">Dönüş</span><input type="date" id="ret"></label>
+<div class="row"><span class="k">Yolcu</span><span class="step"><button id="pm" aria-label="Azalt"><svg class="i"><use href="#mi"/></svg></button><b id="pv">1</b><button id="pp" aria-label="Artır"><svg class="i"><use href="#pl"/></svg></button></span></div>
+</div>
+<button class="go" id="go">Uçuşları ara</button>
+<p class="note" id="dnote">Ülke, şehir veya havalimanı yazın. “Tüm İstanbul” ya da “Tüm Türkiye” gibi seçeneklerle birden fazla havalimanını birlikte arayabilirsiniz.</p>
+</div>
+
+<div id="s-res" class="scr">
+<h1 id="r1"></h1><p class="sub" id="r2"></p>
+<div class="warn" id="wn" hidden>Canlı fiyat servisi bağlı değil. Gösterilen fiyatlar örnektir.</div>
+<div class="days"><button id="dp" aria-label="Önceki günler"><svg class="i"><use href="#ch"/></svg></button><div class="dg" id="dg"></div><button id="dn" aria-label="Sonraki günler"><svg class="i"><use href="#cr"/></svg></button></div>
+<div class="cap">Günlük en düşük fiyat</div>
+<div class="seg" id="sort"><button class="on" data-s="price">Fiyat</button><button data-s="dur">Süre</button><button data-s="dep">Kalkış</button></div>
+<div class="pills"><button class="pill" id="f1">Aktarmasız</button><button class="pill" id="f2">Bagaj dahil</button><button class="pill" id="fal">Tüm havayolları</button><button class="pill" id="aal">Alarm kur</button></div>
+<div id="res"></div>
+<p class="note">Fiyatlar havayolu veya satış ortağı sitesinde yeniden doğrulanır ve değişebilir. Sponsorlu etiketli içerikler ücretli yerleşimdir. Yönlendirmelerden komisyon alınabilir.</p>
+</div>
+</section>
+
+<section id="v-k" class="view pg"><h1>Kampanyalar</h1><div id="kl"></div></section>
+<section id="v-a" class="view pg"><h1>Alarmlar</h1><div id="alr"></div>
+<p class="note">Alarmlar bu cihazda saklanır.</p></section>
+</div>
+
+<nav class="tabs" aria-label="Ana menü"><div>
+<button data-v="ara" aria-selected="true"><svg class="i" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>Ara</button>
+<button data-v="k" aria-selected="false"><svg class="i" viewBox="0 0 24 24"><path d="M3 12V4h8l10 10-8 8L3 12z"/><circle cx="7.5" cy="8.5" r="1.2"/></svg>Kampanyalar</button>
+<button data-v="a" aria-selected="false"><svg class="i" viewBox="0 0 24 24"><path d="M6 16v-5a6 6 0 1112 0v5l2 2H4l2-2z"/><path d="M10 21h4"/></svg>Alarmlar</button>
+</div></nav>
+<div class="ov" id="ov"><div class="sheet" id="sheet" role="dialog" aria-modal="true"></div></div>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+/* ===== AYARLAR ===== */
+const CONFIG={
+ API_URL:"",          /* Kendi sunucunuz (server.js) adresi. Örn: "https://api.siteniz.com". Boşsa örnek veri gösterilir. */
+ CAMPAIGNS_URL:"",    /* Kampanya JSON adresi (isteğe bağlı). Biçim: [{airline:"TK",title:"...",pct:5,cond:"...",until:"2027-03-31",sponsored:false,url:""}] */
+ DATA_URL:"https://raw.githubusercontent.com/jpatokal/openflights/master/data/" /* Ülke/havalimanı/havayolu verisi. Üretimde dosyaları kendi sunucunuza kopyalayın. */
+};
+const $=s=>document.querySelector(s);
+const TRN=Object.fromEntries("Istanbul:İstanbul,London:Londra,Rome:Roma,Munich:Münih,Vienna:Viyana,Athens:Atina,Moscow:Moskova,Zurich:Zürih,Cologne:Köln,Prague:Prag,Brussels:Brüksel,Copenhagen:Kopenhag,Warsaw:Varşova,Venice:Venedik,Naples:Napoli,Florence:Floransa,Geneva:Cenevre,Cairo:Kahire,Seoul:Seul,Beijing:Pekin,Singapore:Singapur,Bucharest:Bükreş,Belgrade:Belgrad,Lisbon:Lizbon,Seville:Sevilla,Edinburgh:Edinburg,Nicosia:Lefkoşa,Tbilisi:Tiflis,Baku:Bakü,Damascus:Şam,Baghdad:Bağdat,Tehran:Tahran,Jeddah:Cidde,Milan:Milano,Turin:Torino,Geneva:Cenevre,Dusseldorf:Düsseldorf,Hanover:Hannover,Nuremberg:Nürnberg,Gothenburg:Göteborg,Mumbai:Mumbai,Bangkok:Bangkok,Moscow:Moskova,Saint Petersburg:Sankt Petersburg,Izmir:İzmir,Adana:Adana,Diyarbakir:Diyarbakır,Kayseri:Kayseri,Mugla:Muğla,Sanliurfa:Şanlıurfa,Eskisehir:Eskişehir,Elazig:Elazığ,Erzurum:Erzurum,Van:Van,Nevsehir:Nevşehir,Kahramanmaras:Kahramanmaraş".split(",").map(x=>x.split(":")));
+const norm=s=>(s||"").toLocaleLowerCase("tr").normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/ı/g,"i");
+const iso=d=>{const p=n=>String(n).padStart(2,"0");return d.getFullYear()+"-"+p(d.getMonth()+1)+"-"+p(d.getDate())};
+const D=s=>new Date(s+"T12:00"),addD=(s,n)=>{const d=D(s);d.setDate(d.getDate()+n);return iso(d)};
+const today=iso(new Date()),dd=s=>Math.round((D(s)-D(today))/864e5);
+const fmt=(s,o)=>D(s).toLocaleDateString("tr-TR",o||{day:"numeric",month:"short"});
+const money=(n,c)=>{try{return new Intl.NumberFormat("tr-TR",{style:"currency",currency:c,maximumFractionDigits:0}).format(n)}catch(e){return Math.round(n)+" "+c}};
+const hmm=m=>Math.floor(m/60)+" sa "+(m%60)+" dk";
+function csv(l){const o=[];let c="",q=0;for(let i=0;i<l.length;i++){const h=l[i];if(h=='"')q=!q;else if(h==","&&!q){o.push(c);c=""}else c+=h}o.push(c);return o.map(x=>x==="\\N"?"":x)}
+function toast(t){const e=$("#toast");e.textContent=t;e.style.display="block";clearTimeout(toast.t);toast.t=setTimeout(()=>e.style.display="none",3000)}
+function store(k,v){try{if(v===undefined)return JSON.parse(localStorage.getItem(k)||"null");localStorage.setItem(k,JSON.stringify(v))}catch(e){return null}}
+let mem=[];const getAl=()=>store("mars_alarms")||mem,setAl=a=>{mem=a;store("mars_alarms",a)};
+
+/* ===== REFERANS VERİ: tüm ülkeler, havalimanları, havayolları ===== */
+const CLOSED=["ISL","TXL","THF","SXF","HHN2"];
+const BYC={},GRP=[],CTRY={},AIRL=[],AIRN={};let CAMP=[],dataState="loading";
+async function txt(f){const r=await fetch(CONFIG.DATA_URL+f+".dat");if(!r.ok)throw new Error(f);return r.text()}
+async function loadData(){
+ try{
+  const [a,c,l]=await Promise.all([txt("airports"),txt("countries"),txt("airlines")]);
+  let rn;try{rn=new Intl.DisplayNames(["tr"],{type:"region"})}catch(e){}
+  const ISO={};c.split("\n").forEach(x=>{if(x){const f=csv(x);ISO[f[0]]=f[1]}});
+  const G={};
+  a.split("\n").forEach(x=>{
+   if(!x)return;const f=csv(x),k=f[4];if(f[12]!="airport"||!/^[A-Z]{3}$/.test(k)||CLOSED.includes(k))return;
+   const cn=f[3],ci=ISO[cn]||"";let C=CTRY[cn];
+   if(!C){let tr=cn;try{if(rn&&ci)tr=rn.of(ci)||cn}catch(e){}C=CTRY[cn]={en:cn,tr,iso:ci,ap:[]}}
+   const city=f[2]||f[1],gk=city+"|"+cn;let g=G[gk];
+   if(!g){g=G[gk]={n:TRN[city]||city,en:city,c:C,ap:[]};GRP.push(g)}
+   const ap={k,name:f[1],g,lat:+f[6],lon:+f[7],tz:f[11],rank:0};g.ap.push(ap);C.ap.push(ap);BYC[k]=ap});
+  GRP.forEach(g=>g.s=norm(g.n+" "+g.en+" "+g.c.tr+" "+g.c.en+" "+g.ap.map(p=>p.k+" "+p.name).join(" ")));
+  const seen={};l.split("\n").forEach(x=>{if(!x)return;const f=csv(x);if(f[7]=="Y"&&/^[A-Z0-9]{2}$/.test(f[3])&&!seen[f[3]]){seen[f[3]]=1;AIRL.push({c:f[3],n:f[1]});AIRN[f[3]]=f[1]}});
+  AIRL.sort((p,q)=>p.n.localeCompare(q.n));
+  dataState="ok";
+  S.F=selCity(BYC.IST.g);S.T=selCity(BYC.FCO.g);paint();
+  fetch(CONFIG.DATA_URL+"routes.dat").then(r=>r.text()).then(t=>{t.split("\n").forEach(x=>{const f=x.split(",");[f[2],f[4]].forEach(k=>{if(BYC[k])BYC[k].rank++})});if(S.F)S.F=refresh(S.F);if(S.T)S.T=refresh(S.T);if($("#q"))renderPick($("#q").value)}).catch(()=>{});
+ }catch(e){dataState="err";$("#dnote").textContent="Havalimanı verisi yüklenemedi. Sayfayı yenileyip tekrar deneyin."}
+}
+const rk=k=>BYC[k]?BYC[k].rank:0;
+const top=(ps,n)=>ps.slice().sort((a,b)=>b.rank-a.rank).slice(0,n);
+const selAp=p=>({l:p.g.ap.length>1?p.name:p.g.n,s:p.g.n+", "+p.g.c.tr+" · "+p.k,codes:[p.k]});
+const selCity=g=>({l:"Tüm "+g.n,s:g.ap.map(a=>a.k).join(", "),codes:top(g.ap,8).map(a=>a.k),g});
+const selCtry=C=>({l:"Tüm "+C.tr,s:"En işlek "+Math.min(6,C.ap.length)+" havalimanı",codes:top(C.ap,6).map(a=>a.k),C});
+const refresh=s=>s.g?selCity(s.g):s.C?selCtry(s.C):s;
+
+/* ===== DURUM ===== */
+let S={F:null,T:null,dep:"",ret:"",pax:1,rt:true,so:0,sort:"price",ns:false,bg:false,al:"",cache:{}},PK=[],ALL=[],OFF=[],pickFor="F",tok=0;
+function sheet(h,sm){const s=$("#sheet");s.className="sheet"+(sm?" sm":"");s.innerHTML=h;$("#ov").classList.add("on");document.body.style.overflow="hidden"}
+function closeSheet(){$("#ov").classList.remove("on");document.body.style.overflow=""}
+
+/* ===== HAVALİMANI SEÇİCİ ===== */
+function openPicker(w){
+ if(dataState!="ok"){toast(dataState=="err"?"Veri yüklenemedi, sayfayı yenileyin.":"Havalimanları yükleniyor…");return}
+ pickFor=w;sheet(`<div class="sh"><span>${w=="F"?"Nereden":"Nereye"}</span><button data-x="1">Kapat</button></div><div class="sb pk"><input class="sr" id="q" type="search" placeholder="Ülke, şehir, havalimanı veya kod" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" aria-label="Ara"><div id="pl"></div></div>`);
+ renderPick("");setTimeout(()=>$("#q")&&$("#q").focus(),60)}
+function block(g,add){
+ if(g.ap.length==1)return `<div class="grp">${add(selAp(g.ap[0]))}</div>`;
+ const aps=top(g.ap,12);
+ return `<div class="gh">${g.n} · ${g.c.tr}</div><div class="grp">${add(selCity(g))}${aps.map(p=>add(selAp(p),"ind")).join("")}</div>`;
+}
+function renderPick(q){
+ const n=norm(q.trim()).replace(/^tum\s*/,"");PK=[];
+ const add=(s,c)=>{PK.push(s);return `<button class="row ${c||""}" data-p="${PK.length-1}"><span><b>${s.l}</b><small>${s.s}</small></span></button>`};
+ let h="";
+ if(!n){
+  h+=`<div class="gh">Hızlı seçim</div><div class="grp">${add(selCtry(CTRY.Turkey))}</div>`;
+  ["IST","ESB","ADB","AYT","LHR","CDG","JFK","FCO","DXB","BER","AMS","MAD"].forEach(k=>{if(BYC[k])h+=block(BYC[k].g,add)});
+ }else{
+  const cs=Object.values(CTRY).filter(C=>C.ap.length&&norm(C.tr+" "+C.en).includes(n)).sort((a,b)=>b.ap.length-a.ap.length).slice(0,4);
+  if(cs.length)h+=`<div class="gh">Ülkeler</div><div class="grp">${cs.map(C=>add(selCtry(C))).join("")}</div>`;
+  const hit=GRP.filter(g=>g.s.includes(n)).map(g=>({g,sc:Math.max(...g.ap.map(p=>p.rank))+(g.ap.some(p=>p.k.toLowerCase()==n)?1e6:0)+(norm(g.n).startsWith(n)||norm(g.en).startsWith(n)?5e3:0)})).sort((a,b)=>b.sc-a.sc).slice(0,30);
+  hit.forEach(x=>h+=block(x.g,add));
+  if(!h)h=`<div class="empty">Sonuç bulunamadı. Ülke, şehir, havalimanı adı veya kod yazın.</div>`;
+ }
+ $("#pl").innerHTML=h;
+}
+
+/* ===== HAVAYOLU FİLTRESİ ===== */
+function openAir(){
+ if(dataState!="ok")return;
+ sheet(`<div class="sh"><span>Havayolu</span><button data-x="1">Kapat</button></div><div class="sb pk"><input class="sr" id="aq" type="search" placeholder="Havayolu adı veya kod" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" aria-label="Havayolu ara"><div id="al"></div></div>`);
+ renderAir("");setTimeout(()=>$("#aq")&&$("#aq").focus(),60)}
+function renderAir(q){
+ const n=norm(q.trim()),l=(n?AIRL.filter(a=>norm(a.n+" "+a.c).includes(n)):AIRL).slice(0,80);
+ $("#al").innerHTML=`<div class="grp">${n?"":`<button class="row" data-al=""><span><b>Tüm havayolları</b><small>${AIRL.length} havayolu</small></span></button>`}${l.map(a=>`<button class="row" data-al="${a.c}"><span><b>${a.n}</b><small>${a.c}</small></span></button>`).join("")||'<div class="empty">Havayolu bulunamadı.</div>'}</div>`;
+}
+
+/* ===== UÇUŞ VERİSİ ===== */
+const sg=it=>it.outbound.segments,L=it=>sg(it)[0],Z=it=>sg(it)[sg(it).length-1];
+const tm=s=>s.slice(11,16),dt=s=>s.slice(0,10);
+const ccode=it=>L(it).marketing_carrier_code||"";
+const cname=it=>it.outbound.carrier||L(it).operating_carrier_name||AIRN[ccode(it)]||ccode(it);
+const dur=it=>it.outbound.duration_minutes||sg(it).reduce((a,s)=>a+s.duration_minutes,0);
+const nstop=it=>sg(it).length-1,bagOk=it=>!!(it.bags&&it.bags.checked>0);
+const nxt=it=>Math.round((D(dt(Z(it).arrival_time_local))-D(dt(L(it).departure_time_local)))/864e5);
+const priceOf=it=>it.price.amount*S.pax;
+function pairs(){const o=[];S.F.codes.forEach(a=>S.T.codes.forEach(b=>{if(BYC[a]&&BYC[b]&&BYC[a].g!==BYC[b].g)o.push([a,b])}));return o.sort((x,y)=>rk(y[0])+rk(y[1])-rk(x[0])-rk(x[1])).slice(0,9)}
+async function live(a,b,date,ret){
+ const p=new URLSearchParams({from:a,to:b,date});if(ret)p.set("return",ret);
+ const r=await fetch(CONFIG.API_URL.replace(/\/$/,"")+"/search?"+p);if(!r.ok)throw new Error(r.status);
+ return (await r.json()).itineraries||[];
+}
+/* Örnek veri üreteci (API_URL boşsa) */
+function hash(s){let h=2166136261;for(const c of s){h^=c.charCodeAt(0);h=Math.imul(h,16777619)}return h>>>0}
+function rng(s){return()=>{s|=0;s=s+0x6D2B79F5|0;let t=Math.imul(s^s>>>15,1|s);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+function demo(a,b,date,ret,two){
+ const A=BYC[a],B=BYC[b],r=rng(hash(a+b+date)),R=Math.PI/180;
+ const km=12742*Math.asin(Math.sqrt(Math.sin((B.lat-A.lat)*R/2)**2+Math.cos(A.lat*R)*Math.cos(B.lat*R)*Math.sin((B.lon-A.lon)*R/2)**2));
+ const lead=dd(date);let base=600+km*.6;base*=lead<7?1.35:lead<21?1.18:lead<45?1.05:1;
+ const cs=["TK","PC","LH","AF","EK","BA","KL","QR","IB"].filter(c=>AIRN[c]),out=[];
+ const seg=(f,t,d,h,m,du,c,n)=>{const s=new Date(d+"T00:00:00");s.setMinutes(h*60+m);const e=new Date(s.getTime()+du*6e4),p=x=>x.getFullYear()+"-"+String(x.getMonth()+1).padStart(2,"0")+"-"+String(x.getDate()).padStart(2,"0")+"T"+String(x.getHours()).padStart(2,"0")+":"+String(x.getMinutes()).padStart(2,"0")+":00";return{marketing_carrier_code:c,flight_number:String(n),operating_carrier_name:AIRN[c],departure_airport:f,departure_time_local:p(s),arrival_airport:t,arrival_time_local:p(e),duration_minutes:du}};
+ cs.forEach(c=>{for(let i=0;i<(two?2:1);i++){
+  const st=km<700?0:(r()<.6?0:1),du=Math.round(km/800*60+35+st*95),h=6+Math.floor(r()*15),m=Math.floor(r()*6)*10,lc=c=="PC"||c=="VF";
+  const mk=(f,t,d)=>st?[seg(f,"XXX",d,h,m,Math.round(du/2),c,100+Math.floor(r()*800)),seg("XXX",t,d,h,m,Math.round(du/2),c,100+Math.floor(r()*800))]:[seg(f,t,d,h,m,du,c,100+Math.floor(r()*800))];
+  const it={price:{amount:Math.round(base*(lc?.76:1+r()*.15)*(.92+r()*.16)*(ret?1.85:1)),currency:"TRY"},outbound:{carrier:AIRN[c],duration_minutes:du,segments:mk(a,b,date)},bags:{checked:lc?0:1}};
+  if(ret)it.inbound={segments:mk(b,a,ret)};out.push(it)}});
+ return out;
+}
+async function getOffers(date,ret,lim){
+ const key=[S.F.l,S.T.l,date,ret,lim].join("|");if(S.cache[key])return S.cache[key];
+ let ps=pairs();if(lim)ps=ps.slice(0,lim);if(!ps.length)throw new Error("pair");
+ const res=await Promise.allSettled(ps.map(([a,b])=>CONFIG.API_URL?live(a,b,date,ret):Promise.resolve(demo(a,b,date,ret,ps.length==1))));
+ const ok=res.filter(r=>r.status=="fulfilled");if(!ok.length)throw new Error("fail");
+ return S.cache[key]=ok.flatMap(r=>r.value);
+}
+
+/* ===== EKRANLAR ===== */
+function paint(){
+ if(!S.F)return;
+ $("#vf").innerHTML=`<b>${S.F.l}</b><small>${S.F.s}</small>`;$("#vt").innerHTML=`<b>${S.T.l}</b><small>${S.T.s}</small>`;
+ $("#retrow").style.display=S.rt?"":"none";$("#pv").textContent=S.pax;
+ document.querySelectorAll("#trip button").forEach(b=>b.classList.toggle("on",(b.dataset.t=="rt")==S.rt));
+}
+function screen(s){$("#s-form").classList.toggle("on",s=="form");$("#s-res").classList.toggle("on",s=="res");$("#back").classList.toggle("on",s=="res")}
+function go(){
+ if(!S.F||!S.T){toast("Havalimanları yükleniyor…");return}
+ const dep=$("#dep").value,ret=$("#ret").value;
+ if(!dep||dd(dep)<0){toast("Gidiş tarihi bugünden önce olamaz.");return}
+ if(S.rt&&(!ret||ret<dep)){toast("Dönüş tarihini gidişten sonra seçin.");return}
+ if(!pairs().length){toast("Kalkış ve varış aynı şehirde olamaz.");return}
+ S.dep=dep;S.ret=S.rt?ret:"";S.so=0;S.cache={};screen("res");draw();window.scrollTo(0,0)
+}
+function draw(){
+ $("#r1").textContent=S.F.l+" – "+S.T.l;
+ $("#r2").textContent=fmt(S.dep,{day:"numeric",month:"long"})+(S.ret?" – "+fmt(S.ret,{day:"numeric",month:"long"}):"")+" · "+S.pax+" yolcu";
+ $("#wn").hidden=!!CONFIG.API_URL;$("#fal").textContent=S.al?(AIRN[S.al]||S.al):"Tüm havayolları";
+ $("#fal").classList.toggle("on",!!S.al);
+ load();days();
+}
+async function days(){
+ const c=addD(S.dep,S.so),cells=[];
+ for(let k=-2;k<=2;k++)cells.push({dt:addD(c,k),k:k+S.so});
+ $("#dg").innerHTML=cells.map(x=>`<button class="day${x.dt==S.dep?" sel":""}" data-d="${x.dt}" ${dd(x.dt)<0?"disabled":""}><small>${fmt(x.dt,{weekday:"short"})}</small><small>${fmt(x.dt)}</small><b id="d${x.dt}">${dd(x.dt)<0?"–":"…"}</b></button>`).join("");
+ const my=tok,res=await Promise.all(cells.map(async x=>{if(dd(x.dt)<0)return null;try{const sh=S.ret?(D(x.dt)-D(S.dep))/864e5:0;const o=await getOffers(x.dt,S.ret?addD(S.ret,sh):"",1);return o.length?Math.min(...o.map(priceOf)):null}catch(e){return null}}));
+ if(my!=tok)return;
+ const cur=ALL[0]?ALL[0].price.currency:"TRY",low=res.filter(v=>v!=null).sort((a,b)=>a-b).slice(0,2);
+ cells.forEach((x,i)=>{const e=document.getElementById("d"+x.dt);if(!e)return;e.textContent=res[i]==null?"–":money(res[i],cur).replace(/\s/g,"");if(res[i]!=null&&low.includes(res[i]))e.parentElement.classList.add("low")});
+}
+async function load(){
+ const my=++tok;$("#res").innerHTML=`<div class="empty">Fiyatlar aranıyor…</div>`;
+ try{ALL=await getOffers(S.dep,S.rt?S.ret:"")}catch(e){if(my!=tok)return;$("#res").innerHTML=`<div class="empty">Fiyatlar alınamadı. Bağlantınızı kontrol edip tekrar deneyin.<br><button class="lnk" id="retry">Tekrar dene</button></div>`;return}
+ if(my!=tok)return;render();
+}
+const campFor=c=>CAMP.filter(x=>x.airline==c);
+function render(){
+ let o=ALL.slice();
+ if(S.al)o=o.filter(x=>sg(x).some(s=>s.marketing_carrier_code==S.al));
+ if(S.ns)o=o.filter(x=>nstop(x)==0);if(S.bg)o=o.filter(bagOk);
+ o.sort((a,b)=>S.sort=="dur"?dur(a)-dur(b):S.sort=="dep"?L(a).departure_time_local.localeCompare(L(b).departure_time_local):a.price.amount-b.price.amount);
+ OFF=o=o.slice(0,50);
+ if(!o.length){$("#res").innerHTML=`<div class="empty">Bu filtrelerle sonuç bulunamadı. Filtreleri gevşetmeyi deneyin.</div>`;return}
+ $("#res").innerHTML=o.map((x,i)=>{const c=campFor(ccode(x))[0],n=nxt(x),ib=x.inbound&&x.inbound.segments&&x.inbound.segments.length?x.inbound.segments:null;
+ return `<button class="offer" data-o="${i}"><div class="o1"><b>${cname(x)}</b><span class="tag">${nstop(x)?nstop(x)+" aktarma":"Aktarmasız"}</span></div>
+ <div class="o2"><span>${tm(L(x).departure_time_local)}</span><span class="ln">${L(x).departure_airport} → ${Z(x).arrival_airport} · ${hmm(dur(x))}</span><span>${tm(Z(x).arrival_time_local)}${n>0?"<sup>+"+n+"</sup>":""}</span></div>
+ ${ib?`<div class="o2 r"><span>${tm(ib[0].departure_time_local)}</span><span class="ln">Dönüş ${ib[0].departure_airport} → ${ib[ib.length-1].arrival_airport}</span><span>${tm(ib[ib.length-1].arrival_time_local)}</span></div>`:""}
+ <div class="o3"><span class="m"><span>${x.bags?(bagOk(x)?"Bagaj dahil":"Bagaj dahil değil"):"Bagaj bilgisi yok"}</span>${c?`<span class="chip">${c.sponsored?"Sponsorlu · ":""}${c.title}</span>`:""}</span><span class="p">${money(priceOf(x),x.price.currency)}<small>${S.pax>1?S.pax+" yolcu":"kişi başı"}${x.price.status=="unverified"?" · doğrulanmadı":""}</small></span></div></button>`}).join("");
+}
+function detail(i){
+ const x=OFF[i],cs=campFor(ccode(x)),legs=[["Gidiş",sg(x)]];if(x.inbound&&x.inbound.segments&&x.inbound.segments.length)legs.push(["Dönüş",x.inbound.segments]);
+ sheet(`<div class="sh"><span>${cname(x)}</span><button data-x="1">Kapat</button></div><div class="sb">
+ ${legs.map(l=>`<div class="gh">${l[0]}</div><div class="grp">${l[1].map(s=>`<div class="ds"><span>${s.marketing_carrier_code||""}${s.flight_number||""}</span><span>${s.departure_airport} ${tm(s.departure_time_local)} → ${s.arrival_airport} ${tm(s.arrival_time_local)}${s.aircraft?"<br><small style='color:var(--mu)'>"+s.aircraft+"</small>":""}</span></div>`).join("")}</div>`).join("")}
+ <div class="grp"><div class="ds"><span>Fiyat</span><b>${money(priceOf(x),x.price.currency)}</b></div><div class="ds"><span>Bagaj</span><span>${x.bags?(bagOk(x)?x.bags.checked+" bagaj dahil":"Dahil değil"):"Bilgi yok"}</span></div></div>
+ ${cs.length?`<div class="gh">Kampanyalar</div><div class="grp">${cs.map(c=>`<div class="ds"><span>${c.title}</span><span>${c.pct?"%"+c.pct:""}</span></div>`).join("")}</div>`:""}
+ ${CONFIG.API_URL&&x.ignav_id?`<button class="go" data-bk="${i}">Rezervasyon seçenekleri</button>`:`<p class="note">Rezervasyon bağlantıları canlı fiyat servisi bağlandığında burada listelenir.</p>`}
+ <p class="note">Fiyat satış sitesinde yeniden doğrulanır ve değişebilir.</p></div>`);
+}
+async function booking(i){
+ const x=OFF[i],b=$("#sheet .go");if(b)b.textContent="Yükleniyor…";
+ try{const r=await fetch(CONFIG.API_URL.replace(/\/$/,"")+"/booking?id="+encodeURIComponent(x.ignav_id));if(!r.ok)throw 0;const j=await r.json(),ls=(j.booking_options||[]).flatMap(o=>o.links||[]);
+  if(!ls.length)throw 0;
+  sheet(`<div class="sh"><span>Rezervasyon</span><button data-x="1">Kapat</button></div><div class="sb"><div class="grp">${ls.map(l=>`<button class="row" data-url="${encodeURIComponent(l.url)}"><span><b>${l.provider_name}</b><small>${l.fare_name||(l.provider_type=="airline"?"Havayolu":"Satış ortağı")}</small></span><b>${l.price?money(l.price.amount,l.price.currency):""}</b></button>`).join("")}</div></div>`);
+ }catch(e){toast("Rezervasyon bağlantısı alınamadı.");if(b)b.textContent="Rezervasyon seçenekleri"}
+}
+function alarmSheet(){
+ sheet(`<div class="sh"><span>Fiyat alarmı</span><button data-x="1">Kapat</button></div><div class="sb"><p class="sub" style="margin-top:0">${S.F.l} – ${S.T.l}, ${fmt(S.dep)}</p><div class="grp"><label class="row"><span class="k">Hedef fiyat</span><input id="tgt" type="number" inputmode="numeric" min="1" style="text-align:right;font-size:17px;width:120px;color:var(--ac)"></label></div><button class="go" id="sal">Alarmı kaydet</button></div>`,1);
+}
+function kl(){
+ const t=D(today),l=CAMP.filter(c=>!c.until||D(c.until)>=t);
+ $("#kl").innerHTML=l.length?l.map(c=>`<div class="cp"><div class="t"><b>${AIRN[c.airline]||c.airline}</b>${c.sponsored?'<span class="tag sp">Sponsorlu</span>':""}</div><div>${c.title}${c.pct?` · <b>%${c.pct}</b>`:""}</div><div style="color:var(--mu);font-size:13px;margin-top:4px">${c.cond||""}${c.until?" · Son gün "+fmt(c.until,{day:"numeric",month:"long",year:"numeric"}):""}</div>${c.url?`<button class="lnk" data-url="${encodeURIComponent(c.url)}">Kampanyayı aç</button>`:""}</div>`).join(""):`<div class="empty">Şu anda listelenecek kampanya yok.</div><p class="note">Kampanya akışı bağlanınca burada görünür.</p>`;
+}
+function alr(){
+ const a=getAl();
+ $("#alr").innerHTML=a.length?a.map((x,i)=>`<div class="cp"><div class="t"><b>${x.f} – ${x.t}</b><span class="tag">${fmt(x.dep)}</span></div><div>Hedef fiyat <b>${money(x.tgt,x.cur||"TRY")}</b></div><button class="del" data-del="${i}">Alarmı sil</button></div>`).join(""):`<div class="empty">Henüz alarm yok. Bir arama yapıp “Alarm kur” seçeneğini kullanın.</div>`;
+}
+function view(v){
+ document.querySelectorAll(".view").forEach(e=>e.classList.toggle("on",e.id=="v-"+v));
+ document.querySelectorAll(".tabs button").forEach(b=>b.setAttribute("aria-selected",b.dataset.v==v));
+ $("#back").classList.toggle("on",v=="ara"&&$("#s-res").classList.contains("on"));
+ $("#bt").textContent={ara:"Mars",k:"Kampanyalar",a:"Alarmlar"}[v];
+ if(v=="a")alr();if(v=="k")kl();window.scrollTo(0,0);
+}
+const openUrl=u=>{u=decodeURIComponent(u);if(!/^https?:\/\//.test(u))u="https://"+u;window.open(u,"_blank","noopener")};
+
+/* ===== BAŞLANGIÇ ===== */
+$("#dep").value=addD(today,30);$("#ret").value=addD(today,37);$("#dep").min=$("#ret").min=today;
+if(CONFIG.CAMPAIGNS_URL)fetch(CONFIG.CAMPAIGNS_URL).then(r=>r.json()).then(j=>{CAMP=Array.isArray(j)?j:[];kl()}).catch(()=>{});
+kl();loadData();
+
+document.addEventListener("click",e=>{
+ if(e.target.id=="ov"){closeSheet();return}
+ const t=e.target.closest("button");if(!t)return;const d=t.dataset;
+ if(d.v)view(d.v);
+ else if(d.x)closeSheet();
+ else if(d.p!==undefined){S[pickFor]=PK[+d.p];paint();closeSheet()}
+ else if(d.al!==undefined){S.al=d.al;closeSheet();if($("#s-res").classList.contains("on")){$("#fal").textContent=S.al?(AIRN[S.al]||S.al):"Tüm havayolları";$("#fal").classList.toggle("on",!!S.al);render()}}
+ else if(d.t){S.rt=d.t=="rt";paint()}
+ else if(d.d){S.dep=d.d;if(S.ret&&S.ret<S.dep)S.ret=addD(S.dep,7);$("#dep").value=S.dep;if(S.ret)$("#ret").value=S.ret;draw()}
+ else if(d.o!==undefined)detail(+d.o);
+ else if(d.bk!==undefined)booking(+d.bk);
+ else if(d.url)openUrl(d.url);
+ else if(d.s){S.sort=d.s;document.querySelectorAll("#sort button").forEach(b=>b.classList.toggle("on",b==t));render()}
+ else if(d.del!==undefined){const a=getAl().slice();a.splice(+d.del,1);setAl(a);alr()}
+ else switch(t.id){
+  case"rf":openPicker("F");break;case"rto":openPicker("T");break;
+  case"swap":if(S.F){[S.F,S.T]=[S.T,S.F];paint()}break;
+  case"pm":S.pax=Math.max(1,S.pax-1);paint();break;case"pp":S.pax=Math.min(9,S.pax+1);paint();break;
+  case"go":go();break;case"back":screen("form");view("ara");break;
+  case"dp":S.so-=5;days();break;case"dn":S.so+=5;days();break;
+  case"f1":S.ns=!S.ns;t.classList.toggle("on",S.ns);render();break;
+  case"f2":S.bg=!S.bg;t.classList.toggle("on",S.bg);render();break;
+  case"fal":openAir();break;case"aal":alarmSheet();break;case"retry":load();break;
+  case"sal":{const v=+$("#tgt").value;if(!v){toast("Hedef fiyatı yazın.");return}const a=getAl().slice();a.push({f:S.F.l,t:S.T.l,dep:S.dep,tgt:v,cur:ALL[0]?ALL[0].price.currency:"TRY"});setAl(a);closeSheet();toast("Alarm kuruldu.")}
+ }
+});
+document.addEventListener("input",e=>{if(e.target.id=="q")renderPick(e.target.value);if(e.target.id=="aq")renderAir(e.target.value)});
+$("#dep").addEventListener("change",e=>{if($("#ret").value<e.target.value)$("#ret").value=addD(e.target.value,7)});
+addEventListener("scroll",()=>$("#bar").classList.toggle("sc",scrollY>40),{passive:true});
+["gesturestart","gesturechange","gestureend"].forEach(g=>document.addEventListener(g,e=>e.preventDefault()));
+const inp=e=>e.target.closest&&e.target.closest("input");
+document.addEventListener("contextmenu",e=>{if(!inp(e))e.preventDefault()});
+["copy","cut","dragstart","selectstart"].forEach(g=>document.addEventListener(g,e=>{if(!inp(e))e.preventDefault()}));
+document.addEventListener("touchmove",e=>{if(e.touches.length>1)e.preventDefault()},{passive:false});
+</script>
+</body>
+</html>
